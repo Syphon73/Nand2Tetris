@@ -42,7 +42,30 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-   // Put you code here:
+   // X input (zx+nx):
+   Mux16(a=x,b[0..15]=false,sel=zx,out=zxout);
+   Not16(in=zxout,out=notzxout);
+   Mux16(a=zxout,b=notzxout,sel=nx,out=nxout);
+
+   // Y input (zy+ny)
+   Mux16(a=y,b[0..15]=false,sel=zy,out=zyout);
+   Not16(in=zyout,out=notzyout);
+   Mux16(a=zyout,b=notzyout,sel=ny,out=nyout);
+
+   // X+Y or X&y
+   Add16(a=nxout,b=nyout,out=xsumy);
+   And16(a=nxout,b=nyout,out=xandy);
+   Mux16(a=xsumy,b=xandy,sel=f,out=fout);
+
+   // Not of output
+   Not16(in=fout,out=notfout);
+   Mux16(a=fout,b=notfout,sel=no,out=out, out[15]=ng, out[0..7]=Bit0.7, out[8..15]=Bit8.15);
+
+   //handeling flags
+   Or8Way (in=Bit0.7, out=Or1);
+   Or8Way (in=Bit8.15, out=Oreo);
+   Or(a=Or1, b=Oreo, out=or16Bits);
+   Not (in=or16Bits, out=zr);
 
 }
 

@@ -32,14 +32,19 @@ Completed __projects/01__
 
 ## Building the ALU
 
-- conversion of decimal -> binary (since gates I/O in binary)
-- **signed binary:**
+- numbers are kept in electronics as high and low (0 or 1), hence base 2
+- **signed/unsigned bits:**
 
 # Adders
-- Half adder: ![half-adder](image-4.png)
-- Full adder: ![full-adder](image-6.png)
-- 16 bit adder:![16-bit-adder](image-5.png)
-- 16 bit Incrementor: ![16-bit-inc](image-7.png)
-- ALU:
+- Half adder: 
+![half-adder](image-4.png)
+- Full adder: 
+![full-adder](image-6.png)
+- 16 bit adder:
+![16-bit-adder](image-5.png)
+- 16 bit Incrementor: 
+![16-bit-inc](image-7.png)
+
+- **ALU:**
 
 Completed __projects/02__
