@@ -1,6 +1,6 @@
 // This file is part of www.nand2tetris.org
-// and the book "The Elements of Computing Systems"
-// by Nisan and Schocken, MIT Press.
+// xandy the book "The Elements of Computing Systems"
+// by Nisan xandy Schocken, MIT Press.
 // File name: projects/02/ALU.hdl
 
 /**
@@ -14,14 +14,14 @@
  * if the ALU output < 0, ng is set to 1; otherwise ng is set to 0.
  */
 
-// Implementation: the ALU logic manipulates the x and y inputs
-// and operates on the resulting values, as follows:
+// Implementation: the ALU logic manipulates the x xandy y inputs
+// xandy operates on the resulting values, as follows:
 // if (zx == 1) set x = 0        // 16-bit constant
 // if (nx == 1) set x = !x       // bitwise not
 // if (zy == 1) set y = 0        // 16-bit constant
 // if (ny == 1) set y = !y       // bitwise not
 // if (f == 1)  set out = x + y  // integer 2's complement addition
-// if (f == 0)  set out = x & y  // bitwise and
+// if (f == 0)  set out = x & y  // bitwise xandy
 // if (no == 1) set out = !out   // bitwise not
 // if (out == 0) set zr = 1
 // if (out < 0) set ng = 1
@@ -42,30 +42,27 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-   // X input (zx+nx):
-   Mux16(a=x,b[0..15]=false,sel=zx,out=zxout);
-   Not16(in=zxout,out=notzxout);
-   Mux16(a=zxout,b=notzxout,sel=nx,out=nxout);
+        Mux16 (a=x, b=false, sel=zx, out=zxout);
+        Mux16 (a=y, b=false, sel=zy, out=zyout);
 
-   // Y input (zy+ny)
-   Mux16(a=y,b[0..15]=false,sel=zy,out=zyout);
-   Not16(in=zyout,out=notzyout);
-   Mux16(a=zyout,b=notzyout,sel=ny,out=nyout);
+        Not16 (in=zxout, out=notzxout);
+        Not16 (in=zyout, out=notzyout);
 
-   // X+Y or X&y
-   Add16(a=nxout,b=nyout,out=xsumy);
-   And16(a=nxout,b=nyout,out=xandy);
-   Mux16(a=xsumy,b=xandy,sel=f,out=fout);
+        Mux16 (a=zxout, b=notzxout, sel=nx, out=nxout);
+        Mux16 (a=zyout, b=notzyout, sel=ny, out=nyout);
 
-   // Not of output
-   Not16(in=fout,out=notfout);
-   Mux16(a=fout,b=notfout,sel=no,out=out, out[15]=ng, out[0..7]=Bit0.7, out[8..15]=Bit8.15);
+        Add16 (a=nxout, b=nyout, out=xsumy);
+        And16 (a=nxout, b=nyout, out=xandy);
 
-   //handeling flags
-   Or8Way (in=Bit0.7, out=Or1);
-   Or8Way (in=Bit8.15, out=Oreo);
-   Or(a=Or1, b=Oreo, out=or16Bits);
-   Not (in=or16Bits, out=zr);
+        Mux16 (a=xandy, b=xsumy, sel=f, out=fout);
+        Not16 (in=fout, out=notfout);
+
+        Mux16 (a=fout, b=notfout, sel=no,  out=out, out[15]=ng, out[0..7]=Bit0.7, out[8..15]=Bit8.15);
+
+        Or8Way (in=Bit0.7, out=Or1);
+        Or8Way (in=Bit8.15, out=Oreo);
+        Or(a=Or1, b=Oreo, out=or16Bits);
+        Not (in=or16Bits, out=zr);
 
 }
 
